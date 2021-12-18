@@ -6,20 +6,19 @@ import articlesRouter from './api/articles';
 import mailRouter from './api/mail';
 
 const app = express();
-const port = 8000;
+const port = process.env.SERVER_PORT;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use(
   cors({
-    origin: 'http://localhost:3000',
+    origin: process.env.ALLOW_ORIGIN,
   })
 );
 app.use(verifyToken);
-
-app.use('/articles', articlesRouter);
-app.use('/mail', mailRouter);
+app.use('/api/articles', articlesRouter);
+app.use('/api/mail', mailRouter);
 
 app.listen(port, () => {
   console.log(`listening on port ${port}`);

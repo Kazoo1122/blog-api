@@ -9,8 +9,7 @@ export const verifyToken = async (req: Request, res: Response, next: NextFunctio
 
   //authorizationキーがない場合
   if (!token) {
-    res.status(401).json({ message: 'Authentication failed.' });
-    return;
+    return res.status(401).json({ message: 'Authentication failed.' });
   }
 
   await verify(token, secretKey, (err: VerifyErrors | null, decoded: object | undefined) => {
@@ -18,8 +17,7 @@ export const verifyToken = async (req: Request, res: Response, next: NextFunctio
       console.log('verified!');
       next();
     } else {
-      res.status(401).json({ message: 'Authentication failed.' });
-      return;
+      return res.status(401).json({ message: 'Authentication failed.' });
     }
   });
 };

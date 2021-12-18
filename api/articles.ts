@@ -40,12 +40,13 @@ router.get('/', async (req, res) => {
     case DATABASE_QUERY.ARTICLES:
       const offset = Number(params[0]);
       const limit = Number(params[1]);
-      sql = `SELECT * FROM articles ORDER BY id desc LIMIT ${offset}, ${limit};`;
-      const posts = (await db.query(sql)) as any;
+      sql = 'SELECT * FROM articles ORDER BY id desc LIMIT ?, ?';
+      const posts = (await db.query(sql, [offset, limit])) as any;
       const start = posts[0].id;
       const end = posts[limit - 1].id;
-      sql = `SELECT articles_id, tag_name FROM tagging_articles INNER JOIN tags ON tagging_articles.tags_id = tags.id WHERE articles_id BETWEEN ${start} AND ${end};`;
-      const tags = (await db.query(sql)) as any;
+      sql =
+        'SELECT articles_id, tag_name FROM tagging_articles INNER JOIN tags ON tagging_articles.tags_id = tags.id WHERE articles_id BETWEEN ? AND ?';
+      const tags = (await db.query(sql, [start, end])) as any;
       tags.forEach((tag: LinkingTag) => {
         const taggedPost = posts.find((post: PostProps) => tag.articles_id === post.id);
         if (Object.prototype.hasOwnProperty.call(taggedPost, 'attachedTag') === false) {
@@ -61,7 +62,7 @@ router.get('/', async (req, res) => {
         return {
           id: item.id,
           title: item.title,
-          content: item.content,
+          content: markdownToPlain(item.content),
           created_at: formatDate(item.created_at),
           updated_at: formatDate(item.updated_at),
           thumbnail:
@@ -73,7 +74,7 @@ router.get('/', async (req, res) => {
             : [],
         };
       });
-      res.status(200).json(result);
+      return res.status(200).json(result);
       break;
     case DATABASE_QUERY.TAGS_FOR_ARTICLES:
       sql = `SELECT articles_id, tag_name FROM tagging_articles INNER JOIN tags ON tagging_articles.tags_id = tags.id WHERE articles_id BETWEEN ${params[1]} AND ${params[0]};`;
