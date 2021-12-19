@@ -9,7 +9,6 @@ const router = express.Router();
 
 const DATABASE_QUERY = {
   ARTICLES: 0,
-  TAGS_FOR_ARTICLES: 1,
   ONE_ARTICLE: 2,
   TAGS_FOR_ONE_ARTICLE: 3,
   ALL_TAGS_ID_AND_NAME: 4,
@@ -32,7 +31,7 @@ type PostProps = {
   attachedTag: Array<string>;
 };
 
-router.get('/', async (req, res) => {
+router.get('/posts-list', async (req, res) => {
   const query = req.query.query;
   const params = req.query.params as string[];
   let sql = '';
@@ -42,11 +41,12 @@ router.get('/', async (req, res) => {
       const limit = Number(params[1]);
       sql = 'SELECT * FROM articles ORDER BY id desc LIMIT ?, ?';
       const posts = (await db.query(sql, [offset, limit])) as any;
-      const start = posts[0].id;
-      const end = posts[limit - 1].id;
+      const start = posts[limit - 1].id;
+      const end = posts[0].id;
       sql =
         'SELECT articles_id, tag_name FROM tagging_articles INNER JOIN tags ON tagging_articles.tags_id = tags.id WHERE articles_id BETWEEN ? AND ?';
       const tags = (await db.query(sql, [start, end])) as any;
+      console.log(tags, 'tags');
       tags.forEach((tag: LinkingTag) => {
         const taggedPost = posts.find((post: PostProps) => tag.articles_id === post.id);
         if (Object.prototype.hasOwnProperty.call(taggedPost, 'attachedTag') === false) {
@@ -75,9 +75,6 @@ router.get('/', async (req, res) => {
         };
       });
       return res.status(200).json(result);
-      break;
-    case DATABASE_QUERY.TAGS_FOR_ARTICLES:
-      sql = `SELECT articles_id, tag_name FROM tagging_articles INNER JOIN tags ON tagging_articles.tags_id = tags.id WHERE articles_id BETWEEN ${params[1]} AND ${params[0]};`;
       break;
     case DATABASE_QUERY.ONE_ARTICLE:
       sql = `SELECT * FROM articles WHERE id=${params[0]}`;
