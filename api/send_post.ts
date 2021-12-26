@@ -33,13 +33,11 @@ router.post('/send-post', async (req, res) => {
   try {
     const articleResult: OkPacket = await db.query(sql, values);
     const lastID = articleResult.insertId;
-    console.log('article result is:', articleResult);
     const tagsResult: OkPacket[] = [];
     await tags.map(async (tag: TagProps) => {
       sql = 'INSERT INTO tagging_articles(articles_id, tags_id) VALUES(?, ?)';
       values = [lastID, tag.id];
       const result: OkPacket = await db.query(sql, values);
-      console.log(result);
       tagsResult.push(result);
     });
     console.log('tags result is:', tagsResult);

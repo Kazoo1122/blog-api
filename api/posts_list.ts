@@ -39,11 +39,9 @@ router.get('/posts-list', async (req, res) => {
       ORDER BY id DESC LIMIT ?, ?`;
   const posts = (await db.query(sql, [offset, limit])) as any;
   if (!posts.length) return res.status(204).json();
-  console.log(posts, 'posts');
   const ids = posts.map((post: PostProps) => {
     return post.id;
   });
-  console.log(ids, 'ids');
   sql = `SELECT articles_id, tag_name 
     FROM tagging_articles 
     INNER JOIN tags ON tagging_articles.tags_id = tags.id 

@@ -9,6 +9,7 @@ import postDetailRouter from './api/post_detail';
 import postIdsRouter from './api/post_ids';
 import sendPostRouter from './api/send_post';
 import tagsSelectionRouter from './api/tags_selection';
+import deletePostRouter from './api/delete_post';
 
 const app = express();
 const port = process.env.SERVER_PORT;
@@ -31,6 +32,7 @@ app.use(url, postDetailRouter);
 app.use(url, postIdsRouter);
 app.use(url, sendPostRouter);
 app.use(url, tagsSelectionRouter);
+app.use(url, deletePostRouter);
 
 app.listen(port, () => {
   console.log(`listening on port ${port}`);
