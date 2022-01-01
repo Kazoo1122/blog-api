@@ -15,6 +15,7 @@ router.get('/post-detail', async (req, res) => {
   const id = req.query.params as string;
   let sql = `SELECT * FROM articles WHERE id= ?`;
   const posts = (await db.query(sql, id)) as any;
+  console.log(posts, 'posts');
   const post = posts.pop(); //DBから取得した配列から記事データを抜き出す
   sql = `SELECT tag_name FROM tagging_articles INNER JOIN tags ON tagging_articles.tags_id = tags.id WHERE tagging_articles.articles_id = ?`;
   const tags = (await db.query(sql, id)) as any;

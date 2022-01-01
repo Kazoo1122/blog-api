@@ -10,6 +10,7 @@ import { Buffer } from 'buffer';
 const router = express.Router();
 
 router.post('/send-post', async (req, res) => {
+  const { type, id } = req.query;
   const THUMBNAIL_IMG_DIR_PATH = '/images/thumbnail/';
   const THUMBNAIL_IMG_DIR_FULL_PATH = path.join(process.cwd(), THUMBNAIL_IMG_DIR_PATH);
   const data = req.body;
@@ -26,13 +27,19 @@ router.post('/send-post', async (req, res) => {
       }
     });
   }
-  const now = new Date();
   let sql =
-    'INSERT INTO articles(title, content, thumbnail, created_at, updated_at) VALUES(?, ?, ?, ?, ?)';
-  let values = [title, content, thumbnail_name, now, now];
+    type === 'NEW'
+      ? 'INSERT INTO articles(title, content, thumbnail, created_at, updated_at) VALUES(?, ?, ?, NOW(), NOW())'
+      : 'UPDATE articles SET title=?, content=?, thumbnail=?, updated_at=NOW() WHERE id=?';
+  let values = [title, content, thumbnail_name];
+  if (type === 'EDIT') values.push(id);
   try {
     const articleResult: OkPacket = await db.query(sql, values);
     const lastID = articleResult.insertId;
+    if (type === 'EDIT') {
+      sql = 'DELETE FROM tagging_articles WHERE articles_id = ?';
+      await db.query(sql, id);
+    }
     const tagsResult: OkPacket[] = [];
     await tags.map(async (tag: TagProps) => {
       sql = 'INSERT INTO tagging_articles(articles_id, tags_id) VALUES(?, ?)';
