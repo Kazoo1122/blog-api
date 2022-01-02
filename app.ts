@@ -23,8 +23,10 @@ app.use(
   })
 );
 
+app.use('/images/thumbnail', express.static('public/images/thumbnail/'));
+
 const url = '/api';
-app.use(verifyToken);
+app.use(url, verifyToken);
 app.use(url, postsListRouter);
 app.use(url, tagsListRouter);
 app.use(url, mailRouter);
