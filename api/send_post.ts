@@ -9,13 +9,24 @@ import { Buffer } from 'buffer';
 
 const router = express.Router();
 
+/**
+ * 記事投稿用のAPI
+ * @param string type 新規投稿(NEW)か編集(EDIT)か
+ * @param string id 編集時の記事ID
+ * @param object body 記事内容
+ * @return json 投稿データおよび新規投稿・編集した記事ID
+ */
 router.post('/send-post', async (req, res) => {
   const { type, id } = req.query;
   const THUMBNAIL_IMG_DIR_PATH = '/public/images/thumbnail/';
   const THUMBNAIL_IMG_DIR_FULL_PATH = path.join(process.cwd(), THUMBNAIL_IMG_DIR_PATH);
   const data = req.body;
   const { title, tags, content, thumbnail_name, thumbnail_data } = data;
-  if (!thumbnail_name) {
+
+  console.log(thumbnail_name, 'thumbnail_name');
+  console.log(thumbnail_name === null);
+  //記事サムネイルの送信があればファイル保存
+  if (thumbnail_name !== null) {
     const imgPath = path.join(THUMBNAIL_IMG_DIR_FULL_PATH, thumbnail_name);
     const buffer = Buffer.from(thumbnail_data, 'base64');
     fs.writeFile(imgPath, buffer, (err) => {
@@ -29,10 +40,12 @@ router.post('/send-post', async (req, res) => {
   }
 
   let sql, values;
+  //新規の場合はそのままDBに格納
   if (type === 'NEW') {
     sql =
       'INSERT INTO articles(title, content, thumbnail, created_at, updated_at) VALUES(?, ?, ?, NOW(), NOW())';
     values = [title, content, thumbnail_name];
+    //編集の場合は更新箇所に応じてsqlを追記
   } else {
     sql = 'UPDATE articles SET title=?';
     values = [title];
@@ -52,14 +65,14 @@ router.post('/send-post', async (req, res) => {
   }
   try {
     const articleResult: OkPacket = await db.query(sql, values);
-    console.log(sql, 'sql');
-    console.log(articleResult, 'articleResult');
     const articles_id = type === 'NEW' ? articleResult.insertId : id;
+    //編集の場合は一度添付タグをクリアしてから付け直す
     if (type === 'EDIT') {
       sql = 'DELETE FROM tagging_articles WHERE articles_id = ?';
       const tagDeleteResult = await db.query(sql, id);
       console.log(tagDeleteResult, 'deleteResult');
     }
+    //記事とタグの中間テーブル(tagging_articles)に記録
     const tagsResult: OkPacket[] = [];
     await tags.map(async (tag: TagProps) => {
       sql = 'INSERT INTO tagging_articles(articles_id, tags_id) VALUES(?, ?)';
@@ -70,7 +83,8 @@ router.post('/send-post', async (req, res) => {
     console.log('tags result is:', tagsResult);
     res.status(201).json({ ...data, id: articles_id });
   } catch (err) {
-    console.log(err, 'databases error.');
+    res.status(500).json('databases error.');
+    console.log(err);
   } finally {
     await db.end();
   }

@@ -3,7 +3,13 @@ import { createTransport } from 'nodemailer';
 
 const router = express.Router();
 
+/**
+ * お問い合わせフォームに入力があった場合にメール通知するためのAPI
+ * @body メールの内容
+ * @return json ステータスコードのみ
+ */
 router.post('/mail', async (req, res) => {
+  //環境変数から情報を取得して設定
   const { MAIL_HOST, MAIL_PORT, MAIL_USER, MAIL_PASS, MAIL_FROM, MAIL_TO } = process.env;
   const options = {
     host: MAIL_HOST,
@@ -29,6 +35,7 @@ router.post('/mail', async (req, res) => {
     text: body,
   };
 
+  //nodemailerで送信
   const transporter = createTransport(options);
   try {
     await transporter.sendMail(mail, function (error, info) {

@@ -4,6 +4,10 @@ import 'express-async-errors';
 
 const router = express.Router();
 
+/**
+ * タグリスト(タグごとの記事数つき)を取得するためのAPI
+ * @return json タグの配列
+ */
 router.get('/tags-list', async (req, res) => {
   const sql =
     'SELECT tag_name, COUNT(tags_id) AS count FROM tags LEFT JOIN tagging_articles ON tags.id = tagging_articles.tags_id GROUP BY tags.id';

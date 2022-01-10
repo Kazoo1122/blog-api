@@ -2,6 +2,12 @@ import { verify, VerifyErrors } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 import 'dotenv/config';
 
+/**
+ * JWT認証を行うミドルウェア
+ * @param req
+ * @param res
+ * @param next
+ */
 export const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
   let secretKey = process.env.JWT_SECRET_KEY as string;
   secretKey = secretKey.replace(/\\n/g, '\n');

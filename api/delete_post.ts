@@ -4,6 +4,11 @@ import 'express-async-errors';
 
 const router = express.Router();
 
+/**
+ * 記事削除のAPI
+ * @param string id 削除対象の記事ID
+ * @return json　ステータスコードのみ
+ */
 router.delete('/delete_post', async (req, res) => {
   const { id } = req.query;
   let sql = 'DELETE FROM articles WHERE id = ?';
