@@ -1,0 +1,16 @@
+{
+  "name": "blog-api",
+  "script": "./app.ts",
+  "exec_mode": "cluster",
+  "instances": 0,
+  "log_date_format": "YYYY-MM-DD HH:mm Z",
+  "instance_var": "INSTANCE_ID",
+  "watch": true,
+  "interpreter": "./node_modules/.bin/ts-node",
+  "env_production": {
+    "NODE_ENV": "production"
+  },
+  "env_development": {
+    "NODE_ENV": "development"
+  }
+}
