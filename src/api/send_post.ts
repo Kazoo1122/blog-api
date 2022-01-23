@@ -1,11 +1,11 @@
-import express from 'express';
-import { db } from '../middleware/mysql';
-import 'express-async-errors';
-import path from 'path';
-import { OkPacket } from 'mysql';
-import fs from 'fs';
-import { TagProps } from './post_detail';
-import { Buffer } from 'buffer';
+import express from "express";
+import { db } from "../middleware/mysql";
+import "express-async-errors";
+import path from "path";
+import { OkPacket } from "mysql";
+import fs from "fs";
+import { TagProps } from "./post_detail";
+import { Buffer } from "buffer";
 
 const router = express.Router();
 
@@ -23,8 +23,6 @@ router.post('/send-post', async (req, res) => {
   const data = req.body;
   const { title, tags, content, thumbnail_name, thumbnail_data } = data;
 
-  console.log(thumbnail_name, 'thumbnail_name');
-  console.log(thumbnail_name === null);
   //記事サムネイルの送信があればファイル保存
   if (thumbnail_name !== null) {
     const imgPath = path.join(THUMBNAIL_IMG_DIR_FULL_PATH, thumbnail_name);

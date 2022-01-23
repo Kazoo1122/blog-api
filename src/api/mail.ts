@@ -1,5 +1,5 @@
-import express from 'express';
-import { createTransport } from 'nodemailer';
+import express from "express";
+import { createTransport } from "nodemailer";
 
 const router = express.Router();
 

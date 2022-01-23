@@ -1,5 +1,5 @@
-import mysql from 'serverless-mysql';
-import 'dotenv/config';
+import mysql from "serverless-mysql";
+import "dotenv/config";
 
 /**
  * mysqlを利用するための設定を読み込む

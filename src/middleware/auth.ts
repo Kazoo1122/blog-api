@@ -1,6 +1,6 @@
-import { verify, VerifyErrors } from 'jsonwebtoken';
-import { Request, Response, NextFunction } from 'express';
-import 'dotenv/config';
+import { verify, VerifyErrors } from "jsonwebtoken";
+import { NextFunction, Request, Response } from "express";
+import "dotenv/config";
 
 /**
  * JWT認証を行うミドルウェア

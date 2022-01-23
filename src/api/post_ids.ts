@@ -1,6 +1,6 @@
-import express from 'express';
-import { db } from '../middleware/mysql';
-import 'express-async-errors';
+import express from "express";
+import { db } from "../middleware/mysql";
+import "express-async-errors";
 
 const router = express.Router();
 

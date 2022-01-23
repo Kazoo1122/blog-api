@@ -1,5 +1,5 @@
-import MarkdownIt from 'markdown-it';
-import plainText from 'markdown-it-plain-text';
+import MarkdownIt from "markdown-it";
+import plainText from "markdown-it-plain-text";
 
 /**
  * マークダウンをHTMLに変換する

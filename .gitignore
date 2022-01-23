@@ -8,10 +8,6 @@
 # testing
 /coverage
 
-# next.js
-/.next/
-/out/
-
 # production
 /build
 
@@ -31,8 +27,8 @@ yarn-error.log*
 .env.production.local
 .env
 
-# vercel
-.vercel
+# built ts files
+dist/**/*
 
-# config
-/config
+#thumbnail
+/public/images/thumbnail/

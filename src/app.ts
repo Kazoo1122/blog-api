@@ -1,15 +1,15 @@
-import express from 'express';
-import cors from 'cors';
-import { verifyToken } from './middleware/auth';
+import express from "express";
+import cors from "cors";
+import { verifyToken } from "./middleware/auth";
 
-import postsListRouter from './api/posts_list';
-import tagsListRouter from './api/tags_list';
-import mailRouter from './api/mail';
-import postDetailRouter from './api/post_detail';
-import postIdsRouter from './api/post_ids';
-import sendPostRouter from './api/send_post';
-import tagsSelectionRouter from './api/tags_selection';
-import deletePostRouter from './api/delete_post';
+import postsListRouter from "./api/posts_list";
+import tagsListRouter from "./api/tags_list";
+import mailRouter from "./api/mail";
+import postDetailRouter from "./api/post_detail";
+import postIdsRouter from "./api/post_ids";
+import sendPostRouter from "./api/send_post";
+import tagsSelectionRouter from "./api/tags_selection";
+import deletePostRouter from "./api/delete_post";
 
 const app = express();
 const port = process.env.SERVER_PORT;
@@ -41,3 +41,5 @@ app.use(url, deletePostRouter);
 app.listen(port, () => {
   console.log(`listening on port ${port}`);
 });
+
+export default app;

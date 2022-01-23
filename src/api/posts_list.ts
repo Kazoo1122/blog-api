@@ -1,9 +1,9 @@
-import express from 'express';
-import { db } from '../middleware/mysql';
-import 'express-async-errors';
-import path from 'path';
-import { formatDate, sortWithDate } from '../middleware/date';
-import { markdownToPlain } from '../middleware/md_convert';
+import express from "express";
+import { db } from "../middleware/mysql";
+import "express-async-errors";
+import path from "path";
+import { formatDate, sortWithDate } from "../middleware/date";
+import { markdownToPlain } from "../middleware/md_convert";
 
 const router = express.Router();
 
@@ -76,8 +76,8 @@ router.get('/posts-list', async (req, res) => {
 
   //記事の作成日順でソート
   const sortedPosts = posts.sort(sortWithDate('created_at', true));
-  const THUMBNAIL_IMG_DIR_PATH = '/images/thumbnail/';
-  const NO_IMG_PATH = path.join(THUMBNAIL_IMG_DIR_PATH, 'no_image.png');
+  const IMG_DIR_PATH = '/images';
+  const NO_IMG_PATH = path.join(IMG_DIR_PATH, 'no_image.png');
   //各記事の日付と内容を整形
   const result = sortedPosts.map((item: PostProps) => {
     return {
@@ -87,7 +87,9 @@ router.get('/posts-list', async (req, res) => {
       created_at: formatDate(item.created_at),
       updated_at: formatDate(item.updated_at),
       thumbnail:
-        item.thumbnail !== null ? path.join(THUMBNAIL_IMG_DIR_PATH, item.thumbnail) : NO_IMG_PATH,
+        item.thumbnail !== null
+          ? path.join(IMG_DIR_PATH, 'thumbnail', item.thumbnail)
+          : NO_IMG_PATH,
       attachedTag: Object.prototype.hasOwnProperty.call(item, 'attachedTag')
         ? item.attachedTag
         : [],
