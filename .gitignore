@@ -31,4 +31,4 @@ yarn-error.log*
 dist/**/*
 
 #thumbnail
-/public/images/thumbnail/
+/src/public/images/thumbnail/**/*
