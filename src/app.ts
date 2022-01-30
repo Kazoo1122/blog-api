@@ -25,7 +25,7 @@ app.use(
   })
 );
 
-app.use('/images/thumbnail', express.static('public/images/thumbnail/'));
+app.use(express.static(__dirname + '/public'));
 
 const url = '/api';
 app.use(url, verifyToken);
