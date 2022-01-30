@@ -18,10 +18,12 @@ const port = process.env.SERVER_PORT;
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
-//テスト環境でCORSを許可する
+//CORSの許可
+const allowCsv = process.env.ALLOW_ORIGIN as string;
+const allowList = allowCsv.split(',');
 app.use(
   cors({
-    origin: process.env.ALLOW_ORIGIN,
+    origin: allowList,
   })
 );
 
