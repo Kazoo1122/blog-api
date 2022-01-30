@@ -21,11 +21,10 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 //CORSの許可
 const allowCsv = process.env.ALLOW_ORIGIN as string;
 const allowList = allowCsv.split(',');
-app.use(
-  cors({
-    origin: allowList,
-  })
-);
+const options: cors.CorsOptions = {
+  origin: allowList,
+};
+app.use(cors(options));
 
 app.use(express.static(__dirname + '/public'));
 
