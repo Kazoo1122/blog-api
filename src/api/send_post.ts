@@ -18,7 +18,8 @@ const router = express.Router();
 router.post('/send-post', async (req, res) => {
   const { type, id } = req.query;
   const THUMBNAIL_IMG_DIR_PATH = '/public/images/thumbnail/';
-  const THUMBNAIL_IMG_DIR_FULL_PATH = __dirname + THUMBNAIL_IMG_DIR_PATH;
+  process.chdir('..');
+  const THUMBNAIL_IMG_DIR_FULL_PATH = process.cwd() + THUMBNAIL_IMG_DIR_PATH;
   const data = req.body;
   const { title, tags, content, thumbnail_name, thumbnail_data } = data;
 
