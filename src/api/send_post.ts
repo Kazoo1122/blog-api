@@ -1,7 +1,6 @@
 import express from "express";
 import { db } from "../middleware/mysql";
 import "express-async-errors";
-import path from "path";
 import { OkPacket } from "mysql";
 import fs from "fs";
 import { TagProps } from "./post_detail";
@@ -19,13 +18,13 @@ const router = express.Router();
 router.post('/send-post', async (req, res) => {
   const { type, id } = req.query;
   const THUMBNAIL_IMG_DIR_PATH = '/public/images/thumbnail/';
-  const THUMBNAIL_IMG_DIR_FULL_PATH = path.join(process.cwd(), THUMBNAIL_IMG_DIR_PATH);
+  const THUMBNAIL_IMG_DIR_FULL_PATH = __dirname + THUMBNAIL_IMG_DIR_PATH;
   const data = req.body;
   const { title, tags, content, thumbnail_name, thumbnail_data } = data;
 
   //記事サムネイルの送信があればファイル保存
   if (thumbnail_name !== null) {
-    const imgPath = path.join(THUMBNAIL_IMG_DIR_FULL_PATH, thumbnail_name);
+    const imgPath = THUMBNAIL_IMG_DIR_FULL_PATH + thumbnail_name;
     const buffer = Buffer.from(thumbnail_data, 'base64');
     fs.writeFile(imgPath, buffer, (err) => {
       if (!err) {
