@@ -3,6 +3,7 @@ import { db } from "../middleware/mysql";
 import "express-async-errors";
 import { OkPacket } from "mysql";
 import fs from "fs";
+import path from "path";
 import { TagProps } from "./post_detail";
 import { Buffer } from "buffer";
 
@@ -18,8 +19,7 @@ const router = express.Router();
 router.post('/send-post', async (req, res) => {
   const { type, id } = req.query;
   const THUMBNAIL_IMG_DIR_PATH = '/public/images/thumbnail/';
-  process.chdir('..');
-  const THUMBNAIL_IMG_DIR_FULL_PATH = process.cwd() + THUMBNAIL_IMG_DIR_PATH;
+  const THUMBNAIL_IMG_DIR_FULL_PATH = path.resolve(__dirname, '..') + THUMBNAIL_IMG_DIR_PATH;
   const data = req.body;
   const { title, tags, content, thumbnail_name, thumbnail_data } = data;
 

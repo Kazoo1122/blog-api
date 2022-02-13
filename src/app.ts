@@ -26,7 +26,7 @@ const options: cors.CorsOptions = {
 };
 app.use(cors(options));
 
-app.use(express.static(process.cwd() + '/public'));
+app.use(express.static(__dirname + '/public'));
 
 const url = '/api';
 app.use(url, verifyToken);
