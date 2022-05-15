@@ -1,6 +1,5 @@
 import MarkdownIt from 'markdown-it';
 import plainText from 'markdown-it-plain-text';
-import iframe from 'markdown-it-iframe';
 
 /**
  * マークダウンをHTMLに変換する
@@ -8,7 +7,7 @@ import iframe from 'markdown-it-iframe';
  * @return string
  */
 export const markdownToHtml = (markdown: string) => {
-  const md = new MarkdownIt().use(iframe);
+  const md = new MarkdownIt({ html: true });
   md.render(markdown);
   return md as any;
 };
