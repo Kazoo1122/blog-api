@@ -8,8 +8,7 @@ import plainText from 'markdown-it-plain-text';
  */
 export const markdownToHtml = (markdown: string) => {
   const md = new MarkdownIt({ html: true });
-  md.render(markdown);
-  return md as any;
+  return md.render(markdown);
 };
 
 /**
