@@ -1,5 +1,5 @@
-import MarkdownIt from "markdown-it";
-import plainText from "markdown-it-plain-text";
+import MarkdownIt from 'markdown-it';
+import plainText from 'markdown-it-plain-text';
 
 /**
  * マークダウンをHTMLに変換する
@@ -7,7 +7,7 @@ import plainText from "markdown-it-plain-text";
  * @return string
  */
 export const markdownToHtml = (markdown: string) => {
-  const md = new MarkdownIt();
+  const md = new MarkdownIt({ html: true });
   return md.render(markdown);
 };
 

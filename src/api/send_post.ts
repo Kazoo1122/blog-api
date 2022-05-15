@@ -1,11 +1,11 @@
-import express from "express";
-import { db } from "../middleware/mysql";
-import "express-async-errors";
-import { OkPacket } from "mysql";
-import fs from "fs";
-import path from "path";
-import { TagProps } from "./post_detail";
-import { Buffer } from "buffer";
+import express from 'express';
+import { db } from '../middleware/mysql';
+import 'express-async-errors';
+import { OkPacket } from 'mysql';
+import fs from 'fs';
+import path from 'path';
+import { TagProps } from './post_detail';
+import { Buffer } from 'buffer';
 
 const router = express.Router();
 
