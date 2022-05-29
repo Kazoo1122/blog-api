@@ -1,9 +1,9 @@
-import express from "express";
-import { db } from "../middleware/mysql";
-import "express-async-errors";
-import path from "path";
-import { formatDate, sortWithDate } from "../middleware/date";
-import { markdownToPlain } from "../middleware/md_convert";
+import express from 'express';
+import { db } from '../middleware/mysql';
+import 'express-async-errors';
+import path from 'path';
+import { formatDate, sortWithDate } from '../middleware/date';
+import { markdownToPlain } from '../middleware/md_convert';
 
 const router = express.Router();
 
@@ -37,18 +37,25 @@ router.get('/posts-list', async (req, res) => {
 
   // if 1. フィルタリングするタグが設定されているか
   // if 2. 記事数(limit)の設定がされているか
-  let sql =
-    tag === undefined
-      ? limit === 0
+  let sql, bind;
+  if (tag === undefined) {
+    sql =
+      limit === 0
         ? 'SELECT * FROM articles ORDER BY id DESC'
-        : 'SELECT * FROM articles ORDER BY id DESC LIMIT ?, ?'
-      : `SELECT a.id, a.title, a.content, a.thumbnail, a.created_at, a.updated_at
+        : 'SELECT * FROM articles ORDER BY id DESC LIMIT ?, ?';
+    bind = [offset, limit];
+  } else {
+    const encodedTag = decodeURI(tag.toString());
+    sql = `SELECT a.id, a.title, a.content, a.thumbnail, a.created_at, a.updated_at
       FROM articles AS a
       LEFT JOIN tagging_articles AS ta ON a.id = ta.articles_id
       LEFT JOIN tags AS t ON ta.tags_id = t.id
-      WHERE t.tag_name = '${tag}'
+      WHERE t.tag_name = '?'
       ORDER BY id DESC LIMIT ?, ?`;
-  const posts = (await db.query(sql, [offset, limit])) as any;
+    bind = [encodedTag, offset, limit];
+  }
+
+  const posts = (await db.query(sql, bind)) as any;
 
   //記事がなければ終了
   if (!posts.length) return res.status(204).json();
@@ -59,9 +66,9 @@ router.get('/posts-list', async (req, res) => {
   });
 
   //記事に添付されたタグを取得
-  sql = `SELECT articles_id, tag_name 
-    FROM tagging_articles 
-    INNER JOIN tags ON tagging_articles.tags_id = tags.id 
+  sql = `SELECT articles_id, tag_name
+    FROM tagging_articles
+    INNER JOIN tags ON tagging_articles.tags_id = tags.id
     WHERE articles_id IN(?)`;
   const tags = (await db.query(sql, [ids])) as any;
 
