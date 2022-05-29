@@ -45,7 +45,7 @@ router.get('/posts-list', async (req, res) => {
         : 'SELECT * FROM articles ORDER BY id DESC LIMIT ?, ?';
     bind = [offset, limit];
   } else {
-    const encodedTag = decodeURI(tag.toString());
+    const encodedTag = decodeURIComponent(tag.toString());
     sql = `SELECT a.id, a.title, a.content, a.thumbnail, a.created_at, a.updated_at
       FROM articles AS a
       LEFT JOIN tagging_articles AS ta ON a.id = ta.articles_id
