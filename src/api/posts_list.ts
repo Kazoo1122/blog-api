@@ -50,7 +50,7 @@ router.get('/posts-list', async (req, res) => {
       FROM articles AS a
       LEFT JOIN tagging_articles AS ta ON a.id = ta.articles_id
       LEFT JOIN tags AS t ON ta.tags_id = t.id
-      WHERE t.tag_name = '?'
+      WHERE t.tag_name = "?"
       ORDER BY id DESC LIMIT ?, ?`;
     bind = [encodedTag, offset, limit];
   }
