@@ -1,6 +1,7 @@
 import { verify, VerifyErrors } from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
 import "dotenv/config";
+import fs from "fs";
 
 /**
  * JWT認証を行うミドルウェア
@@ -9,8 +10,8 @@ import "dotenv/config";
  * @param next
  */
 export const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
-  let secretKey = process.env.JWT_SECRET_KEY as string;
-  secretKey = secretKey.replace(/\\n/g, '\n');
+  const publicKeyPath = process.env.PUBLIC_KEY_PATH as string;
+  const publicKeyContent = fs.readFileSync(publicKeyPath).toString();
   const token = req.headers.authorization;
 
   //authorizationキーがない場合
@@ -19,7 +20,7 @@ export const verifyToken = async (req: Request, res: Response, next: NextFunctio
     return res.status(401).json({ message: 'Authentication failed.' });
   }
 
-  await verify(token, secretKey, (err: VerifyErrors | null, decoded: object | undefined) => {
+  verify(token, publicKeyContent, (err: VerifyErrors | null, decoded: object | undefined) => {
     if (err === null && decoded !== undefined) {
       console.log('verified!');
       next();

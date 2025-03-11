@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node dist/bin/www.js",
+    "start": "node dist/app.js",
     "dev": "ts-node-dev --respawn src/app.ts"
   },
   "dependencies": {
