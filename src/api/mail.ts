@@ -10,19 +10,15 @@ const router = express.Router();
  */
 router.post('/mail', async (req, res) => {
   //環境変数から情報を取得して設定
-  const { MAIL_HOST, MAIL_PORT, MAIL_USER, MAIL_PASS, MAIL_FROM, MAIL_TO } = process.env;
+  const { MAIL_SERVICE, MAIL_PORT, MAIL_USER, MAIL_PASS, MAIL_FROM, MAIL_TO } = process.env;
   const options = {
-    host: MAIL_HOST,
+    service: MAIL_SERVICE,
     port: Number(MAIL_PORT),
-    secure: false,
-    requireTLS: true,
-    tls: {
-      rejectUnauthorized: false,
-    },
+    secure: true,
     auth: {
       user: MAIL_USER,
       pass: MAIL_PASS,
-    },
+  },
   };
   const { name, email, message } = req.body;
   const body = `ご氏名：${name}
@@ -38,7 +34,7 @@ router.post('/mail', async (req, res) => {
   //nodemailerで送信
   const transporter = createTransport(options);
   try {
-    await transporter.sendMail(mail, function (error, info) {
+    transporter.sendMail(mail, (error, info) => {
       if (error) {
         console.log('send failed');
         console.log(error.message);
