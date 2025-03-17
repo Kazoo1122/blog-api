@@ -28,7 +28,7 @@ app.use(cors(options));
 
 app.use(express.static(__dirname + '/public'));
 
-const url = '/api';
+const url = '/blog-api';
 app.use(url, verifyToken);
 app.use(url, postsListRouter);
 app.use(url, tagsListRouter);
