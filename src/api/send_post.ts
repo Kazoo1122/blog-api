@@ -41,11 +41,11 @@ router.post('/send-post', async (req, res) => {
   //新規の場合はそのままDBに格納
   if (type === 'NEW') {
     sql =
-      'INSERT INTO articles(title, content, thumbnail, created_at, updated_at) VALUES("?", ?, ?, NOW(), NOW())';
+      'INSERT INTO articles(title, content, thumbnail, created_at, updated_at) VALUES(?, ?, ?, NOW(), NOW())';
     values = [title, content, thumbnail_name];
     //編集の場合は更新箇所に応じてsqlを追記
   } else {
-    sql = 'UPDATE articles SET title="?"';
+    sql = 'UPDATE articles SET title=?';
     values = [title];
     if (content) {
       sql += ', content=?';
