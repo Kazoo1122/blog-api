@@ -26,7 +26,7 @@ const options: cors.CorsOptions = {
 };
 app.use(cors(options));
 
-app.use(express.static(__dirname + '/public'));
+app.use('/public', express.static(__dirname + '/public'));
 
 const url = '/blog-api';
 app.use(url, verifyToken);
