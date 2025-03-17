@@ -83,7 +83,7 @@ router.get('/posts-list', async (req, res) => {
 
   //記事の作成日順でソート
   const sortedPosts = posts.sort(sortWithDate('created_at', true));
-  const IMG_DIR_PATH = '/images';
+  const IMG_DIR_PATH = '/images/article';
   const NO_IMG_PATH = path.join(IMG_DIR_PATH, 'no_image.png');
   //各記事の日付と内容を整形
   const result = sortedPosts.map((item: PostProps) => {
