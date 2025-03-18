@@ -30,7 +30,4 @@ yarn-error.log*
 # built ts files
 dist/**/*
 
-#thumbnail
-/public/images/thumbnail/**/*
-
 *.pub
