@@ -60,6 +60,8 @@ router.post('/send-post', async (req, res) => {
     }
     sql += ', updated_at=NOW() WHERE id=?';
     values.push(id);
+    console.log('sql is:', sql);
+    console.log('values is:', values);
   }
   try {
     const articleResult: OkPacket = await db.query(sql, values);
